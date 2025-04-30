@@ -14,6 +14,14 @@ const Register = () => {
     setErrorMessage('') 
     setSuccess(false)
 
+    // pass word valdation  extra slash added 
+    const passwordRegExpress = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
+
+    if(passwordRegExpress.test(password) === false){
+      setErrorMessage(' Must be more than 8 characters, includingAt least one number At least one lowercase letter At least one uppercase letter')
+      return;
+    }
+
     // create user 
 
     createUserWithEmailAndPassword(auth,email,password)
