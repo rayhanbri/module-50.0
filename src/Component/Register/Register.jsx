@@ -4,19 +4,22 @@ import { auth } from '../../firebase-init';
 
 const Register = () => {
   const [errorMessage,setErrorMessage] = useState('');
+  const [success,setSuccess] = useState(false);
   const handleRegister = e => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password)
-
-    setErrorMessage('')
+  //  jate porer bar code run korle error na dhekai 
+    setErrorMessage('') 
+    setSuccess(false)
 
     // create user 
 
     createUserWithEmailAndPassword(auth,email,password)
     .then(result =>{
       console.log(result)
+      setSuccess(true)
     })
     .catch(error => {
       console.log(error)
@@ -78,6 +81,9 @@ const Register = () => {
       </form>
       {
         errorMessage && <p className='text-red-500'>{errorMessage}</p>
+      }
+      {
+        success && <p className='text-green-600'>User Successfully</p>
       }
     </div>
   );
