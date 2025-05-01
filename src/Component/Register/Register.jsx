@@ -5,15 +5,21 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [success, setSuccess] = useState(false);
-  const [showPassWord,setShowPassWord] = useState(false);
+  const [showPassWord, setShowPassWord] = useState(false);
   const handleRegister = e => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(email, password)
+    const terms = e.target.terms.checked;
+    console.log(email, password,terms)
     //  jate porer bar code run korle error na dhekai 
     setErrorMessage('')
     setSuccess(false)
+
+    if(!terms){
+      setErrorMessage('please accept our terms and conditions');
+      return;
+    }
 
     // pass word valdation  extra slash added 
     const passwordRegExpress = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
@@ -85,14 +91,20 @@ const Register = () => {
 
               />
               <button
-              onClick={()=>{setShowPassWord(!showPassWord)}}
-               className='btn btn-xs mr-12'>
-              {
-                showPassWord ? <FaEyeSlash></FaEyeSlash> : <FaEye />
-              }
+                onClick={() => { setShowPassWord(!showPassWord) }}
+                className='btn btn-xs mr-12'>
+                {
+                  showPassWord ? <FaEyeSlash></FaEyeSlash> : <FaEye />
+                }
               </button>
             </div>
           </label>
+          <div>
+          <label className="label my-3">
+            <input type="checkbox" name='terms'  className="checkbox" />
+            Accept the Term and Conditions
+          </label>
+          </div>
           <input className='btn btn-primary' type="submit" value="Submit" />
         </div>
 
