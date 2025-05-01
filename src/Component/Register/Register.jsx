@@ -1,38 +1,39 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth } from '../../firebase-init';
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Register = () => {
-  const [errorMessage,setErrorMessage] = useState('');
-  const [success,setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [showPassWord,setShowPassWord] = useState(false);
   const handleRegister = e => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password)
-  //  jate porer bar code run korle error na dhekai 
-    setErrorMessage('') 
+    //  jate porer bar code run korle error na dhekai 
+    setErrorMessage('')
     setSuccess(false)
 
     // pass word valdation  extra slash added 
     const passwordRegExpress = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
 
-    if(passwordRegExpress.test(password) === false){
+    if (passwordRegExpress.test(password) === false) {
       setErrorMessage(' Must be more than 8 characters, includingAt least one number At least one lowercase letter At least one uppercase letter')
       return;
     }
 
     // create user 
 
-    createUserWithEmailAndPassword(auth,email,password)
-    .then(result =>{
-      console.log(result)
-      setSuccess(true)
-    })
-    .catch(error => {
-      console.log(error)
-      setErrorMessage(error.message)
-    })
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(result => {
+        console.log(result)
+        setSuccess(true)
+      })
+      .catch(error => {
+        console.log(error)
+        setErrorMessage(error.message)
+      })
 
   }
   return (
@@ -75,13 +76,22 @@ const Register = () => {
                 <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
               </g>
             </svg>
-            <input
-              type="password"
-              name='password'
-              required
-              placeholder="Password"
+            <div>
+              <input
+                type={showPassWord ? 'text' : 'password'}
+                name='password'
+                required
+                placeholder="Password"
 
-            />
+              />
+              <button
+              onClick={()=>{setShowPassWord(!showPassWord)}}
+               className='btn btn-xs mr-12'>
+              {
+                showPassWord ? <FaEyeSlash></FaEyeSlash> : <FaEye />
+              }
+              </button>
+            </div>
           </label>
           <input className='btn btn-primary' type="submit" value="Submit" />
         </div>
