@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth } from '../../firebase-init';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -9,6 +9,8 @@ const Register = () => {
   const [showPassWord, setShowPassWord] = useState(false);
   const handleRegister = e => {
     e.preventDefault();
+    const name = e.target.name.value;
+    const photo = e.target.photo.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const terms = e.target.terms.checked;
@@ -41,8 +43,22 @@ const Register = () => {
         sendEmailVerification(auth.currentUser)
           .then(() => {
             setSuccess(true)
+            alert('we sent you a varification email . please check your email.')
           })
 
+        // update user profile 
+
+        const profile = {
+          displayName:name,
+          photoURL:photo
+        }
+      updateProfile(auth.currentUser,profile)
+      .then(() =>{
+        console.log('user profile updated')
+      })
+      .catch(error => console.log(error))
+
+    
       })
       .catch(error => {
         console.log(error)
@@ -56,6 +72,14 @@ const Register = () => {
       <form onSubmit={handleRegister}>
         {/* Email  */}
         <div className='space-y-4'>
+          <label className="input validator">
+
+            <input type="text" name='name' placeholder="Your Name" required />
+          </label>
+          <label className="input validator">
+
+            <input type="text" name='photo' placeholder="Your Photo URl" required />
+          </label>
           <label className="input validator">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <g
