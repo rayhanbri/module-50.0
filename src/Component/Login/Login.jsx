@@ -4,11 +4,11 @@ import { auth } from '../../firebase-init';
 import { Link } from 'react-router';
 
 const Login = () => {
-  const [errorMessage,setErrorMessage] = useState('');
-  const [success,setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [success, setSuccess] = useState(false);
 
   // reset 
-  
+
 
 
   const handleSignIn = e => {
@@ -18,7 +18,7 @@ const Login = () => {
     const password = e.target.password.value;
 
     // console.log(email,password)
-    
+
     // reset 
     setErrorMessage('');
     setSuccess(false);
@@ -28,7 +28,12 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(result => {
         console.log(result.user)
-        setSuccess(true);
+        if (!result.user.emailVerified){
+          alert('please Varify your email')
+        }
+          else{
+            setSuccess(true);
+          }
       })
       .catch(error => {
         console.log(error)
@@ -51,7 +56,7 @@ const Login = () => {
           <label className="label">Password</label>
           <input type="password" name='password' className="input" placeholder="Password" />
           <div><a className="link link-hover">Forgot password?</a></div>
-          
+
           <button className="btn btn-neutral mt-4">Login</button>
         </form>
         <p>If please <Link className='text-blue-700 underline' to='/register'>Sing UP</Link></p>

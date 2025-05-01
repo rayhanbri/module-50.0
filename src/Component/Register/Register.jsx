@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth } from '../../firebase-init';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -12,12 +12,12 @@ const Register = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const terms = e.target.terms.checked;
-    console.log(email, password,terms)
+    console.log(email, password, terms)
     //  jate porer bar code run korle error na dhekai 
     setErrorMessage('')
     setSuccess(false)
 
-    if(!terms){
+    if (!terms) {
       setErrorMessage('please accept our terms and conditions');
       return;
     }
@@ -35,7 +35,14 @@ const Register = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(result => {
         console.log(result)
-        setSuccess(true)
+
+        // email varify 
+
+        sendEmailVerification(auth.currentUser)
+          .then(() => {
+            setSuccess(true)
+          })
+
       })
       .catch(error => {
         console.log(error)
@@ -101,10 +108,10 @@ const Register = () => {
             </div>
           </label>
           <div>
-          <label className="label my-3">
-            <input type="checkbox" name='terms'  className="checkbox" />
-            Accept the Term and Conditions
-          </label>
+            <label className="label my-3">
+              <input type="checkbox" name='terms' className="checkbox" />
+              Accept the Term and Conditions
+            </label>
           </div>
           <input className='btn btn-primary' type="submit" value="Submit" />
         </div>
