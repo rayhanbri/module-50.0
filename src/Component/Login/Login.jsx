@@ -1,11 +1,71 @@
-import React from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
+import { auth } from '../../firebase-init';
+import { Link } from 'react-router';
 
 const Login = () => {
+  const [errorMessage,setErrorMessage] = useState('');
+  const [success,setSuccess] = useState(false);
+
+  // reset 
+  
+
+
+  const handleSignIn = e => {
+    e.preventDefault();
+    console.log('submit')
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    // console.log(email,password)
+    
+    // reset 
+    setErrorMessage('');
+    setSuccess(false);
+
+    // login with email and pass 
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(result => {
+        console.log(result.user)
+        setSuccess(true);
+      })
+      .catch(error => {
+        console.log(error)
+        setErrorMessage(error.message)
+      })
+
+
+
+  }
+
+
   return (
-    <div>
-      <h1>this is log in</h1>
+
+    <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
+      <div className="card-body">
+        <h1 className="text-5xl font-bold">Login now!</h1>
+        <form onSubmit={handleSignIn} className="fieldset">
+          <label className="label">Email</label>
+          <input type="email" name='email' className="input" placeholder="Email" />
+          <label className="label">Password</label>
+          <input type="password" name='password' className="input" placeholder="Password" />
+          <div><a className="link link-hover">Forgot password?</a></div>
+          
+          <button className="btn btn-neutral mt-4">Login</button>
+        </form>
+        <p>If please <Link className='text-blue-700 underline' to='/register'>Sing UP</Link></p>
+        {
+          errorMessage && <p className='text-red-500 font-bold font-serif'>{errorMessage}</p>
+        }
+        {
+          success && <p className='text-green-400 '>user loged in Successfully</p>
+        }
+      </div>
     </div>
+
   );
 };
 
 export default Login;
+
